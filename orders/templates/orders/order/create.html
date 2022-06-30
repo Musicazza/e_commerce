@@ -1,0 +1,55 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% load mathfilters %}
+{% block title %}
+  Checkout
+{% endblock %}
+
+{% block content %}
+ <link href="{% static 'css/base.css' %}" rel="stylesheet">
+
+ </br>
+  </br>
+  <h1>Checkout</h1>
+
+  <div class="order-info">
+    <h3>Your order</h3>
+    <ul>
+      {% for item in cart %}
+        <li>
+          {{ item.quantity }}x {{ item.product.name }}
+          <span>${{ item.total_price }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+    <p>Total: {{ cart.get_total_price }} DHS</p>
+  </div>
+
+  <form action="." method="post" class="order-form">
+    {{ form.as_p }}
+    <p><input type="submit" value="Place order"  class="stripe-button"></p>
+    {% csrf_token %}
+ 
+
+
+    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+          data-key="{{ key }}"
+          data-description='Pay By Credit Cart'
+          data-amount= "{{ cart.get_total_price|mul:100 }}"
+          data-locale="auto"></script>
+ </form>
+
+    <style type="text/css">
+    input[type=date], input[type=datetime-local], input[type=email], input[type=number], input[type=password], input[type=search-md], input[type=tel], input[type=text], input[type=time], input[type=url], textarea.materialize-textarea {
+      height: 2em !important;
+    }
+  </style>
+<style type="text/css">
+  
+  .stripe-button-el  {
+    display: none;
+   
+</style>
+
+
+{% endblock %}
